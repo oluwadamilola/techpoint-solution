@@ -1,0 +1,17 @@
+{
+  "name": "max-techpoint",
+  "version": "1.0.0",
+  "main": "src/classifier.js",
+  "author": "Bond <bond@max.ng>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "jest": "24.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.6"
+  }
+}

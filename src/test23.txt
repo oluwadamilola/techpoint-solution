@@ -1,0 +1,93 @@
+function processStudentsData(students = []) {
+        return students
+            .map(student => {
+                student.age =
+                    new Date().getFullYear() - new Date(student.dob).getFullYear()
+
+                return student
+            })
+            .sort((a, b) => a.age - b.age)
+    }
+
+    // this function allows students to join to the group and make sure they are not more than 3 in a group and their age difference is not more that 5
+    function studentCanJoinGroup(student, studentGroup = { members: [] }) {
+        if (studentGroup.members.length >= 3) return false
+
+        return !studentGroup.members.find(
+            student2 => Math.abs(student.age - student2.age) > 5
+        )
+    }
+
+    // this function initializes the variable groups to 0
+    function groupStudents(students) {
+        const groups = {
+            noOfGroups: 0
+        }
+
+        // this function adds students to a new group and take their details(name, age, and regNo) and picks out the oldest, the sum of their ages and makes the regNo an integer
+        const addStudentToNewGroup = (student, key) => {
+            groups[key] = {
+                members: [{ name: student.name, age: student.age }],
+                oldest: student.age,
+                sum: student.age,
+                regNos: [student.regNo | 0]
+            }
+        }
+
+        // this function collects the data from the array and puts the students in different groups 
+        // else the if statement checks if there is an available to add a new student in if not adds the students to a new group
+        // the second else statement is to increment number of groups and add the student to a new group
+        processStudentsData(inputs).forEach((student, index) => {
+                if (index === 0) groups.noOfGroups++
+                    const key = `group${groups.noOfGroups}`
+
+                if (studentCanJoinGroup(student, groups[key])) {
+                    if (!groups[key]) addStudentToNewGroup(student, key)
+                    else {
+                        groups[key].members.push({
+                            name: student.name,
+                            age: student.age
+                        })
+                        groups[key].oldest = Math.max(groups[key].oldest, student.age)
+                        groups[key].sum += student.age
+
+                        const newRegNo = student.regNo | 0
+
+                        groups[key].regNos = [newRegNo]
+                            .concat(groups[key].regNos)
+                            .sort((a, b) => a > b)
+                    }
+                } else {
+                    const newKey = `group${++groups.noOfGroups}`
+
+                    addStudentToNewGroup(student, newKey)
+                }
+            })
+            // displays the content of each group
+        console.log(JSON.stringify(groups))
+
+    }
+
+    // the group of students are generated from the arrray inputs
+    //groupStudents(inputs)
+
+    // n = {}
+    // result = input
+    //     .sort(({ dob: a }, { dob: b }) => b.localeCompare(a))
+    //     .reduce((r, o) => {
+    //         var key = 'group' + n,
+    //             age = getAge(o.dob);
+
+    //         if (!r[key] || r[key].members.length >= 3 || r[key].oldest + 5 < age) {
+    //             key = 'group' + ++n;
+    //             r[key] = { members: [], oldest: 0, sum: 0, regNos: [] };
+    //         }
+    //         r[key].members.push(Object.assign({}, o, { age }));
+    //         r[key].oldest = age;
+    //         r[key].sum += age;
+    //         r[key].regNos.push(o.regNo);
+    //         return r;
+    //     }, {});
+
+    // console.log(result);
+}
